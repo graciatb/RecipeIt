@@ -28,13 +28,13 @@ def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db), c
 
 # Get Latest Recipe
 @router.get("/latest")
-def get_latest(db: Session = Depends(get_db)):
+def get_latest_recipe(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     recipe = db.query(models.Recipe).order_by(models.Recipe.created_at.desc()).first()
     return recipe
 
 # Get Recipe by Id
 @router.get("/{id}")
-def get_recipe(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+def get_recipe_by_id(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     recipe = db.query(models.Recipe).filter(models.Recipe.id == id).first()
     if not recipe:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Recipe with id {id} doesn't exist")
@@ -69,6 +69,6 @@ def update_recipe(id: int, updated_recipe: schemas.RecipeCreate, db: Session = D
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Recipe with id {id} doesn't exist")
     if recipe.owner_id != current_user.id:
         raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail=f"You don't have access to edit the recipe with id {id}")
-    recipe.update(updated_recipe.model_dump(), synchronize_session = False)
+    recipe_query.update(updated_recipe.model_dump(), synchronize_session = False)
     db.commit()
     return  recipe_query.first()

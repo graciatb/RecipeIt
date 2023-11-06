@@ -45,11 +45,25 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Optional[int] = None
 
-class Restaurant(BaseModel):
+class FoodContentBase(BaseModel):
+    title: str
+    desc: str
+    topic: str
+    published: bool = True
+
+class ContentCreate(FoodContentBase):
+    pass
+
+class FoodContent(FoodContentBase):
     id: int
-    name: str
-    location: str
-    category: str
-    email: str
-    phone_number: str
-    published: str
+    created_at: datetime
+    owner_id: int
+    owner: UserOut    
+
+    class Config():
+        from_attributes = True
+
+class ReviewBase(BaseModel):
+    id: int
+    rating: int
+    review: str
