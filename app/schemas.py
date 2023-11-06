@@ -64,6 +64,5 @@ class FoodContent(FoodContentBase):
         from_attributes = True
 
 class ReviewBase(BaseModel):
-    id: int
     rating: int
     review: str

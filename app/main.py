@@ -10,8 +10,8 @@ app = FastAPI()
 app.include_router(recipe.router)
 app.include_router(user.router)
 app.include_router(auth.router)
-app.include_router(review.router)
-app.include_router(foodContent.router) 
+app.include_router(review.router) 
+app.include_router(foodContent.router)
 
 @app.get("/") 
 def root():
