@@ -38,8 +38,8 @@ def get_review_by_user_id(user_id: int, db: Session = Depends(get_db), current_u
 
 # Get Reviews by Recipe Id
 @router.get("/recipe/{recipe_id}")
-def get_review_by_recipe_id(user_id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    review = db.query(models.Review).filter(models.Review.user_id == user_id).all()
+def get_review_by_recipe_id(recipe_id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    review = db.query(models.Review).filter(models.Review.recipe_id == recipe_id).all()
     if not review:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Recipe with id {id} have no review")
     return review
